@@ -1,10 +1,22 @@
 const express = require('express');
-const path = require('path');
-const router = express.Router();
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Serve the index.html file for the root route
-router.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../views/index.html'));
+// 中间件以解析 JSON 请求体
+app.use(express.json());
+
+app.post('/process', (req, res) => {
+    const { text } = req.body;
+
+    // 返回 JSON 字符串，包含输入文本
+    const response = {
+        originalText: text,
+        message: 'Received your text!',
+    };
+
+    res.json(response);
 });
 
-module.exports = router;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
